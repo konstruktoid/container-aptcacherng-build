@@ -1,9 +1,10 @@
 #!/bin/sh
-PROTO="http https"
-IPA=$(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
-
+PROTO="ftp http https"
 echo "# Proxies added $(date) " | sudo tee /etc/apt/apt.conf.d/01proxy
 
+CIP=$(docker inspect -f '{{.NetworkSettings.IPAddress}}' apt-cacher-ng)
+
 for p in $PROTO; do
-  echo "Acquire::$p::Proxy \"http://$IPA:3142\";" | sudo tee --append /etc/apt/apt.conf.d/01proxy
+  echo "Acquire::$p::Proxy \"http://$CIP:3142\";" | \
+    sudo tee --append /etc/apt/apt.conf.d/01proxy
 done
