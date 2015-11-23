@@ -1,0 +1,59 @@
+
+#include <tunables/global>
+
+
+profile docker-aptcacherng flags=(attach_disconnected,mediate_deleted) {
+  #include <abstractions/base>
+
+
+  network,
+  deny network raw,
+
+  deny network packet,
+
+  capability,
+  file,
+  umount,
+
+  deny /bin/** wl,
+  deny /boot/** wl,
+  deny /dev/** wl,
+  deny /etc/** wl,
+  deny /home/** wl,
+  deny /lib/** wl,
+  deny /lib64/** wl,
+  deny /media/** wl,
+  deny /mnt/** wl,
+  deny /opt/** wl,
+  deny /proc/** wl,
+  deny /root/** wl,
+  deny /sbin/** wl,
+  deny /srv/** wl,
+  deny /tmp/** wl,
+  deny /sys/** wl,
+  deny /usr/** wl,
+
+  audit /** w,
+
+  /var/log/** w,
+  /var/cache/** w,
+
+  /usr/sbin/apt-cacher-ng ix,
+  /acng.sh ix,
+
+
+
+  deny @{PROC}/{*,**^[0-9*],sys/kernel/shm*} wkx,
+  deny @{PROC}/sysrq-trigger rwklx,
+  deny @{PROC}/mem rwklx,
+  deny @{PROC}/kmem rwklx,
+  deny @{PROC}/kcore rwklx,
+  deny mount,
+  deny /sys/[^f]*/** wklx,
+  deny /sys/f[^s]*/** wklx,
+  deny /sys/fs/[^c]*/** wklx,
+  deny /sys/fs/c[^g]*/** wklx,
+  deny /sys/fs/cg[^r]*/** wklx,
+  deny /sys/firmware/efi/efivars/** rwklx,
+  deny /sys/kernel/security/** rwklx,
+}
