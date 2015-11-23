@@ -19,3 +19,5 @@ docker run -d --restart=always --cap-drop=all --name apt-cacher-ng -p 3142:3142 
 Acquire::http::Proxy "http://DOCKERCONTAINERIP:3142";
 Acquire::https::Proxy "http://DOCKERCONTAINERIP:3142";
 ```
+
+`./apparmor/` contains apparmor profile and toml file, `--security-opt="apparmor:docker-aptcacherng"`
