@@ -20,4 +20,5 @@ Acquire::http::Proxy "http://DOCKERCONTAINERIP:3142";
 Acquire::https::Proxy "http://DOCKERCONTAINERIP:3142";
 ```
 
-`./apparmor/` contains apparmor profile and toml file, `--security-opt="apparmor:docker-aptcacherng"`
+`./apparmor/` contains apparmor profile and toml file, `--security-opt="apparmor:docker-aptcacherng"`  
+`docker run -d --security-opt="apparmor:docker-aptcacherng" --name apt-cacher-ng -p 3142:3142 apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*`

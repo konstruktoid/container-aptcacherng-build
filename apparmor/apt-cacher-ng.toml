@@ -41,6 +41,14 @@ AllowExec = [
 	"/acng.sh",
 ]
 
+[Capabilities]
+Allow = [
+	"chown",
+	"dac_override",
+	"setuid",
+	"setgid"
+]
+
 [Network]
 # if you don't need to ping in a container, you can probably
 # set Raw to false and deny network raw

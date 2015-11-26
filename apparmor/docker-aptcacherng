@@ -6,12 +6,13 @@ profile docker-aptcacherng flags=(attach_disconnected,mediate_deleted) {
   #include <abstractions/base>
 
 
+
   network,
+
   deny network raw,
 
   deny network packet,
 
-  capability,
   file,
   umount,
 
@@ -42,6 +43,11 @@ profile docker-aptcacherng flags=(attach_disconnected,mediate_deleted) {
   /acng.sh ix,
 
 
+
+  capability chown,
+  capability dac_override,
+  capability setuid,
+  capability setgid,
 
   deny @{PROC}/{*,**^[0-9*],sys/kernel/shm*} wkx,
   deny @{PROC}/sysrq-trigger rwklx,
