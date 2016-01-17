@@ -10,8 +10,13 @@ http://DOCKERCONTAINERIP:3142/acng-report.html
 ```
 
 Autobuild:
-```
+```sh
 docker run -d --restart=always --cap-drop=all --name apt-cacher-ng -p 3142:3142 konstruktoid/apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*
+```
+
+Using tmpfs:
+```sh
+docker run -d --restart=always --cap-drop=all --read-only --tmpfs /tmp:rw,nosuid,noexec,nodev --tmpfs /run:rw,nosuid,noexec,nodev --tmpfs /var/log/apt-cacher-ng:rw,nosuid,noexec,nodev --name apt-cacher-ng -p 3142:3142 konstruktoid/apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*
 ```
 
 /etc/apt/apt.conf.d/01proxy:
