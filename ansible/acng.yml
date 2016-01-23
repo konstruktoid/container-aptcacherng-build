@@ -14,4 +14,6 @@
       - "0.0.0.0:3124:3124"
       cap_drop: all
       pull: always
+      restart_policy: on-failure
+      restart_policy_retry: 3
 ...
