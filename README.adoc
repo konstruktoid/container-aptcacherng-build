@@ -1,5 +1,7 @@
 = Apt-Cacher NG
 
+image::https://images.microbadger.com/badges/image/konstruktoid/apt-cacher-ng.svg[microbadger.com]
+
 https://www.unix-ag.uni-kl.de/~bloch/acng/
 
 == Manual build
