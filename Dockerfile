@@ -2,6 +2,10 @@ FROM konstruktoid/debian:wheezy
 
 ENV USER apt-cacher-ng
 
+LABEL \
+    org.labelschema.url="https://www.unix-ag.uni-kl.de/~bloch/acng/" \
+    org.labelschema.vcs-url="https://github.com/konstruktoid/AptCacherNG_Build"
+
 RUN \
     apt-get update && \
     apt-get -y upgrade && \
