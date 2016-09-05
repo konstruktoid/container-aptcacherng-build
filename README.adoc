@@ -1,6 +1,6 @@
 = Apt-Cacher NG
 
-image::https://images.microbadger.com/badges/image/konstruktoid/apt-cacher-ng.svg[microbadger.com]
+image::https://images.microbadger.com/badges/image/konstruktoid/apt-cacher-ng.svg[link="http://microbadger.com/images/konstruktoid/apt-cacher-ng"]
 
 https://www.unix-ag.uni-kl.de/~bloch/acng/
 
