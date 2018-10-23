@@ -12,6 +12,10 @@ docker run -d --cap-drop=all --name apt-cacher-ng -p 3142:3142 apt-cacher-ng Ver
 http://DOCKERCONTAINERIP:3142/acng-report.html
 ----
 
+`./apparmor/` contains apparmor profile and toml file, `--security-opt="apparmor:docker-aptcacherng"`
+
+`docker run -d --security-opt="apparmor:docker-aptcacherng" --name apt-cacher-ng -p 3142:3142 apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*`
+
 == Autobuild
 [source]
 ----
@@ -25,5 +29,16 @@ Acquire::http::Proxy "http://DOCKERCONTAINERIP:3142";
 Acquire::https::Proxy "http://DOCKERCONTAINERIP:3142";
 ----
 
-`./apparmor/` contains apparmor profile and toml file, `--security-opt="apparmor:docker-aptcacherng"`  
-`docker run -d --security-opt="apparmor:docker-aptcacherng" --name apt-cacher-ng -p 3142:3142 apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*`
+[source]
+----
+#!/bin/sh
+PROTO="ftp http https"
+echo "# Proxies added $(date) " | sudo tee /etc/apt/apt.conf.d/01proxy
+
+CIP=$(docker inspect -f '{{.NetworkSettings.IPAddress}}' apt-cacher-ng)
+
+for p in $PROTO; do
+  echo "Acquire::$p::Proxy \"http://$CIP:3142\";" | \
+    sudo tee --append /etc/apt/apt.conf.d/01proxy
+done
+----

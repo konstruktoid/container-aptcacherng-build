@@ -1,4 +1,4 @@
-FROM konstruktoid/debian:wheezy
+FROM konstruktoid/ubuntu:bionic
 
 ENV USER apt-cacher-ng
 
@@ -8,6 +8,7 @@ LABEL \
     org.labelschema.vcs-url="https://github.com/konstruktoid/AptCacherNG_Build"
 
 RUN \
+    sed -i 's/main/main universe/' /etc/apt/sources.list && \
     apt-get update && \
     apt-get -y upgrade && \
     apt-get -y install apt-cacher-ng --no-install-recommends && \
