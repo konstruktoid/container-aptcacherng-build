@@ -25,7 +25,7 @@ RUN \
     chown -R $USER:$USER /acng.sh /var/cache/apt-cacher-ng /var/log/apt-cacher-ng
 
 VOLUME ["/var/cache/apt-cacher-ng"]
-EXPOSE 3124
+EXPOSE 3142
 
 USER $USER
 
