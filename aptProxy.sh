@@ -1,10 +1,18 @@
-#!/bin/sh
+#!/bin/bash
+
+set -eu
+set -o pipefail
+
 PROTO="ftp http https"
-echo "# Proxies added $(date) " | sudo tee /etc/apt/apt.conf.d/01proxy
 
 CIP=$(docker inspect -f '{{.NetworkSettings.IPAddress}}' apt-cacher-ng)
 
 for p in $PROTO; do
-  echo "Acquire::$p::Proxy \"http://$CIP:3142\";" | \
-    sudo tee --append /etc/apt/apt.conf.d/01proxy
+  PROXY_ACQUIRE="Acquire::$p { Proxy \"http://$CIP:3142\"; }"
+  if [[ -d /etc/apt/apt.conf.d ]]; then
+    echo "${PROXY_ACQUIRE}" | \
+      sudo tee --append /etc/apt/apt.conf.d/01proxy
+  else
+    echo "${PROXY_ACQUIRE}"
+  fi
 done
