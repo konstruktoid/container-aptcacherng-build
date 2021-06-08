@@ -11,7 +11,7 @@ RUN \
     sed -i 's/main/main universe/' /etc/apt/sources.list && \
     apt-get update && \
     apt-get -y upgrade && \
-    apt-get -y install apt-cacher-ng --no-install-recommends && \
+    apt-get -y install apt-cacher-ng ca-certificates --no-install-recommends && \
     apt-get -y clean && \
     mkdir -p /var/log/apt-cacher-ng /var/cache/apt-cacher-ng && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
