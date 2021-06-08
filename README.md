@@ -1,44 +1,50 @@
-= Apt-Cacher NG
+# Apt-Cacher NG
 
-image::https://images.microbadger.com/badges/image/konstruktoid/apt-cacher-ng.svg[link="http://microbadger.com/images/konstruktoid/apt-cacher-ng"]
+[https://www.unix-ag.uni-kl.de/~bloch/acng/](https://www.unix-ag.uni-kl.de/~bloch/acng/)
 
-https://www.unix-ag.uni-kl.de/~bloch/acng/
+## Manual build
 
-== Manual build
-[source]
-----
-docker build -t apt-cacher-ng -f Dockerfile .
+```sh
+docker build --no-cache --tag apt-cacher-ng:latest -f Dockerfile .
 docker run -d --cap-drop=all --name apt-cacher-ng -p 3142:3142 apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*
 http://DOCKERCONTAINERIP:3142/acng-report.html
-----
+```
 
 `./apparmor/` contains apparmor profile and toml file, `--security-opt="apparmor:docker-aptcacherng"`
 
 `docker run -d --security-opt="apparmor:docker-aptcacherng" --name apt-cacher-ng -p 3142:3142 apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*`
 
-== Autobuild
-[source]
-----
+## Autobuild
+
+```sh
 docker run -d --restart=always --cap-drop=all --name apt-cacher-ng -p 3142:3142 konstruktoid/apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*
-----
+```
 
-=== /etc/apt/apt.conf.d/01proxy
-[source]
-----
-Acquire::http::Proxy "http://DOCKERCONTAINERIP:3142";
-Acquire::https::Proxy "http://DOCKERCONTAINERIP:3142";
-----
+### /etc/apt/apt.conf.d/01proxy
 
-[source]
-----
-#!/bin/sh
+```sh
+Acquire::ftp { Proxy "http://172.17.0.2:3142"; }
+Acquire::http { Proxy "http://172.17.0.2:3142"; }
+Acquire::https { Proxy "http://172.17.0.2:3142"; }
+```
+
+```sh
+#!/bin/bash
+
+set -eu
+set -o pipefail
+
 PROTO="ftp http https"
-echo "# Proxies added $(date) " | sudo tee /etc/apt/apt.conf.d/01proxy
 
 CIP=$(docker inspect -f '{{.NetworkSettings.IPAddress}}' apt-cacher-ng)
 
 for p in $PROTO; do
-  echo "Acquire::$p::Proxy \"http://$CIP:3142\";" | \
-    sudo tee --append /etc/apt/apt.conf.d/01proxy
+  PROXY_ACQUIRE="Acquire::$p { Proxy \"http://$CIP:3142\"; }"
+  if [[ -d /etc/apt/apt.conf.d ]]; then
+    echo "${PROXY_ACQUIRE}" | \
+      sudo tee --append /etc/apt/apt.conf.d/01proxy
+  else
+    echo "${PROXY_ACQUIRE}"
+  fi
 done
-----
+```
