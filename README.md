@@ -5,14 +5,14 @@
 ## Manual build
 
 ```sh
-docker build --no-cache --tag apt-cacher-ng:latest -f Dockerfile .
-docker run -d --cap-drop=all --name apt-cacher-ng -p 3142:3142 apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*
-http://DOCKERCONTAINERIP:3142/acng-report.html
+docker build --no-cache --tag konstruktoid/apt-cacher-ng:latest -f Dockerfile .
+docker run -d --cap-drop=all --name apt-cacher-ng -p 3142:3142 konstruktoid/apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*
+curl -s http://$(docker inspect -f '{{.NetworkSettings.IPAddress}}' apt-cacher-ng):3142/acng-report.html
 ```
 
 `./apparmor/` contains apparmor profile and toml file, `--security-opt="apparmor:docker-aptcacherng"`
 
-`docker run -d --security-opt="apparmor:docker-aptcacherng" --name apt-cacher-ng -p 3142:3142 apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*`
+`docker run -d --security-opt="apparmor:docker-aptcacherng" --name apt-cacher-ng -p 3142:3142 konstruktoid/apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*`
 
 ## Autobuild
 
