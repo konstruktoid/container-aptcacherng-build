@@ -7,22 +7,22 @@ LABEL \
     org.labelschema.url="https://www.unix-ag.uni-kl.de/~bloch/acng/" \
     org.labelschema.vcs-url="https://github.com/konstruktoid/AptCacherNG_Build"
 
+COPY ./acng.sh /acng.sh
+
 RUN \
     sed -i 's/main/main universe/' /etc/apt/sources.list && \
     apt-get update && \
     apt-get -y upgrade && \
-    apt-get -y install apt-cacher-ng ca-certificates curl --no-install-recommends && \
+    DEBIAN_FRONTEND=noninteractive apt-get -y install apt-cacher-ng \
+      ca-certificates curl --no-install-recommends && \
     apt-get -y clean && \
     mkdir -p /var/log/apt-cacher-ng /var/cache/apt-cacher-ng && \
+    chmod 0700 /acng.sh && \
+    chown -R $USER:$USER /acng.sh /var/cache/apt-cacher-ng \
+      /var/log/apt-cacher-ng /var/run/apt-cacher-ng && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
       /usr/share/doc /usr/share/doc-base \
       /usr/share/man /usr/share/locale /usr/share/zoneinfo
-
-COPY ./acng.sh /acng.sh
-
-RUN \
-    chmod 0700 /acng.sh && \
-    chown -R $USER:$USER /acng.sh /var/cache/apt-cacher-ng /var/log/apt-cacher-ng
 
 HEALTHCHECK --interval=5m --timeout=3s \
    CMD curl -f http://127.0.0.1:3142/acng-report.html || exit 1
