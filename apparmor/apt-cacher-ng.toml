@@ -5,48 +5,49 @@ Name = "aptcacherng"
 [Filesystem]
 # read only paths for the container
 ReadOnlyPaths = [
-	"/bin/**",
-	"/boot/**",
-	"/dev/**",
-	"/etc/**",
-	"/home/**",
-	"/lib/**",
-	"/lib64/**",
-	"/media/**",
-	"/mnt/**",
-	"/opt/**",
-	"/proc/**",
-	"/root/**",
-	"/sbin/**",
-	"/srv/**",
-	"/tmp/**",
-	"/sys/**",
-	"/usr/**",
+  "/bin/**",
+  "/boot/**",
+  "/dev/**",
+  "/etc/**",
+  "/home/**",
+  "/lib/**",
+  "/lib64/**",
+  "/media/**",
+  "/mnt/**",
+  "/opt/**",
+  "/proc/**",
+  "/root/**",
+  "/sbin/**",
+  "/srv/**",
+  "/tmp/**",
+  "/sys/**",
+  "/usr/**",
 ]
 
 # paths where you want to log on write
 LogOnWritePaths = [
-	"/**"
+  "/**"
 ]
 
 # paths where you can write
 WritablePaths = [
-	"/var/log/**",
-	"/var/cache/**"
+  "/var/cache/**",
+  "/var/log/**",
+  "/var/run/**"
 ]
 
 # allowed executable files for the container
 AllowExec = [
-	"/usr/sbin/apt-cacher-ng",
-	"/acng.sh",
+  "/usr/sbin/apt-cacher-ng",
+  "/acng.sh",
 ]
 
 [Capabilities]
 Allow = [
-	"chown",
-	"dac_override",
-	"setuid",
-	"setgid"
+  "chown",
+  "dac_override",
+  "setuid",
+  "setgid"
 ]
 
 [Network]

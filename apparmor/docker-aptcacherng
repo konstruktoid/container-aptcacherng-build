@@ -36,8 +36,9 @@ profile docker-aptcacherng flags=(attach_disconnected,mediate_deleted) {
 
   audit /** w,
 
-  /var/log/** w,
   /var/cache/** w,
+  /var/log/** w,
+  /var/run/** w,
 
   /usr/sbin/apt-cacher-ng ix,
   /acng.sh ix,
