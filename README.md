@@ -14,11 +14,9 @@ curl -s http://$(docker inspect -f '{{.NetworkSettings.IPAddress}}' apt-cacher-n
 
 `docker run -d --security-opt="apparmor:docker-aptcacherng" --name apt-cacher-ng -p 3142:3142 konstruktoid/apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*`
 
-## Autobuild
-
-```sh
-docker run -d --restart=always --cap-drop=all --name apt-cacher-ng -p 3142:3142 konstruktoid/apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*
-```
+_Please note that because of the changes to [Docker Automated Builds](https://docs.docker.com/docker-hub/builds/)
+many Docker images are now outdated and a manual build is required and
+recommended._
 
 ### /etc/apt/apt.conf.d/01proxy
 
