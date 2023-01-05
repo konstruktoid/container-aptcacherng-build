@@ -5,14 +5,10 @@
 ## Manual build
 
 ```sh
-docker build --no-cache --tag konstruktoid/apt-cacher-ng:latest -f Dockerfile .
-docker run -d --cap-drop=all --name apt-cacher-ng -p 3142:3142 konstruktoid/apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*
-curl -s http://$(docker inspect -f '{{.NetworkSettings.IPAddress}}' apt-cacher-ng):3142/acng-report.html
+podman build --no-cache --tag konstruktoid/apt-cacher-ng:latest -f Dockerfile .
+podman run -d --cap-drop=all --name apt-cacher-ng -p 3142:3142 konstruktoid/apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*
+curl -s 127.0.0.1:3142/acng-report.html
 ```
-
-`./apparmor/` contains apparmor profile and toml file, `--security-opt="apparmor:docker-aptcacherng"`
-
-`docker run -d --security-opt="apparmor:docker-aptcacherng" --name apt-cacher-ng -p 3142:3142 konstruktoid/apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*`
 
 _Please note that because of the changes to [Docker Automated Builds](https://docs.docker.com/docker-hub/builds/)
 many Docker images are now outdated and a manual build is required and
