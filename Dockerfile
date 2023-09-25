@@ -1,11 +1,11 @@
-FROM konstruktoid/ubuntu:focal
+FROM ubuntu:jammy
 
 ENV USER apt-cacher-ng
 
 LABEL \
     org.label-schema.name="AptCacherNG" \
     org.labelschema.url="https://www.unix-ag.uni-kl.de/~bloch/acng/" \
-    org.labelschema.vcs-url="https://github.com/konstruktoid/AptCacherNG_Build"
+    org.labelschema.vcs-url="git@github.com:konstruktoid/container-aptcacherng-build.git"
 
 COPY ./acng.sh /acng.sh
 
