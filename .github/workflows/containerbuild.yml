@@ -3,6 +3,7 @@ name: Container build and push
 on:
   schedule:
     - cron: "0 5 * * */2"
+  workflow_dispatch:
 
 permissions:
   contents: read
