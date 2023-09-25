@@ -31,4 +31,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: konstruktoid/alpine:latest
+          tags: konstruktoid/apt-cacher-ng:latest
