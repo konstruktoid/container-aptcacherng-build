@@ -1,2 +1,2 @@
 #!/bin/sh
-/usr/sbin/apt-cacher-ng -c /etc/apt-cacher-ng "$@"
+/usr/sbin/apt-cacher-ng -c /etc/apt-cacher-ng ForeGround=1 "$@"

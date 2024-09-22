@@ -1,6 +1,6 @@
 FROM ubuntu:noble
 
-ENV USER apt-cacher-ng
+ENV USER=apt-cacher-ng
 
 LABEL \
     org.label-schema.name="AptCacherNG" \
