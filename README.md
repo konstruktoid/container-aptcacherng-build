@@ -5,7 +5,7 @@
 ## Usage
 
 ```sh
-docker run -d --cap-drop=all --name apt-cacher-ng -p 3142:3142 konstruktoid/apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*
+docker run -d --cap-drop=all --name apt-cacher-ng -p 3142:3142 konstruktoid/apt-cacher-ng VerboseLog=1 Debug=7 PassThroughPattern=.*
 curl -s 127.0.0.1:3142/acng-report.html
 ```
 
@@ -13,17 +13,11 @@ curl -s 127.0.0.1:3142/acng-report.html
 
 ```sh
 docker build --no-cache --tag konstruktoid/apt-cacher-ng:latest -f Dockerfile .
-docker run -d --cap-drop=all --name apt-cacher-ng -p 3142:3142 konstruktoid/apt-cacher-ng VerboseLog=1 Debug=7 ForeGround=1 PassThroughPattern=.*
+docker run -d --cap-drop=all --name apt-cacher-ng -p 3142:3142 konstruktoid/apt-cacher-ng VerboseLog=1 Debug=7 PassThroughPattern=.*
 curl -s 127.0.0.1:3142/acng-report.html
 ```
 
-### /etc/apt/apt.conf.d/01proxy
-
-```sh
-Acquire::ftp { Proxy "http://172.17.0.2:3142"; }
-Acquire::http { Proxy "http://172.17.0.2:3142"; }
-Acquire::https { Proxy "http://172.17.0.2:3142"; }
-```
+### Example /etc/apt/apt.conf.d/01proxy script
 
 ```sh
 #!/bin/bash
