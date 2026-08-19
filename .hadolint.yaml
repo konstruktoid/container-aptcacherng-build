@@ -1,0 +1,11 @@
+---
+ignored:
+  # These images exist to track the newest patched package set, so pinning
+  # every package to a version would defeat their purpose. The base image is
+  # pinned by digest instead, and Renovate keeps that digest current.
+  - DL3008
+  - DL3018
+  # Users are referenced by name on purpose; the accounts are created by the
+  # distribution packages inside the image.
+  - DL3066
+failure-threshold: warning

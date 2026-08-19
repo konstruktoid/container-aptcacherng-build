@@ -1,0 +1,10 @@
+---
+# Line length applies to prose only; sample command output and long URLs inside
+# code blocks and tables cannot be rewrapped without corrupting them.
+MD013:
+  line_length: 80
+  code_blocks: false
+  tables: false
+# The "$ " prompt prefix distinguishes what you type from what is printed back,
+# which is how the examples in these READMEs are written.
+MD014: false
