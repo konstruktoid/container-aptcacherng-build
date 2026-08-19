@@ -1,0 +1,31 @@
+---
+# Keeps the SHA pins in .github/workflows/ and the base image digest in the
+# Dockerfile current, now that Renovate is gone. Dependabot rewrites the
+# version comment next to a pinned SHA, so pinning does not freeze the
+# repository at an old release.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    # Most malicious releases are found and yanked within days, so waiting a
+    # week before adopting one absorbs a large share of the supply-chain risk.
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 7

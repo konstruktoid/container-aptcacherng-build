@@ -38,8 +38,10 @@ curl --fail http://127.0.0.1:3142/acng-report.html
 
 ### Pointing apt at the cache
 
-`aptProxy.sh` reads the container's address with `docker inspect` and appends
-the matching `Acquire::*::Proxy` lines to `/etc/apt/apt.conf.d/01proxy`. It needs
+`aptProxy.sh` reads the container's address with `docker inspect` and writes
+the matching `Acquire::*::Proxy` lines to `/etc/apt/apt.conf.d/01proxy`. That
+file is replaced rather than appended to, so rerunning it after the container
+has been recreated does not leave the previous address behind. It needs
 `docker` and, to write that file, `sudo`:
 
 ```sh
@@ -47,8 +49,9 @@ the matching `Acquire::*::Proxy` lines to `/etc/apt/apt.conf.d/01proxy`. It need
 ./aptProxy.sh my-container
 ```
 
-If `/etc/apt/apt.conf.d` does not exist the lines are printed instead of written,
-so the script is safe to run on a non-Debian host to see what it would do.
+If `/etc/apt/apt.conf.d` does not exist the lines are printed instead of
+written, so the script is safe to run on a non-Debian host to see what it would
+do.
 
 ## AppArmor
 
@@ -63,3 +66,6 @@ and markdownlint:
 ```sh
 pre-commit run --all-files
 ```
+
+Dependabot keeps the action pins and the base image digest current. It does not
+cover the hook revisions above, so refresh those with `pre-commit autoupdate`.

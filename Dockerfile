@@ -10,7 +10,9 @@ LABEL org.opencontainers.image.title="apt-cacher-ng" \
 ARG DEBIAN_FRONTEND=noninteractive
 ENV ACNG_USER=apt-cacher-ng
 
-COPY --chmod=0500 ./acng.sh /acng.sh
+# Owned by root and only readable/executable by others, so the unprivileged
+# runtime user cannot rewrite its own entry point.
+COPY --chmod=0555 ./acng.sh /acng.sh
 
 # universe is enabled by default in the official noble image, so no sources
 # rewriting is needed to reach apt-cacher-ng.
@@ -22,12 +24,11 @@ RUN apt-get update && \
       curl && \
     mkdir -p /var/log/apt-cacher-ng /var/cache/apt-cacher-ng /var/run/apt-cacher-ng && \
     chown -R "${ACNG_USER}:${ACNG_USER}" \
-      /acng.sh \
       /var/cache/apt-cacher-ng \
       /var/log/apt-cacher-ng \
       /var/run/apt-cacher-ng && \
-    apt-get -y clean && \
     apt-get -y autoremove && \
+    apt-get -y clean && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
       /usr/share/doc /usr/share/doc-base \
       /usr/share/man /usr/share/locale /usr/share/zoneinfo

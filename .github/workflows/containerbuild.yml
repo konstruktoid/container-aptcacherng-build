@@ -5,17 +5,25 @@ on:
     paths:
       - 'Dockerfile'
       - '.dockerignore'
+      - 'acng.sh'
       - '.github/workflows/containerbuild.yml'
   schedule:
     - cron: "0 5 * * */2"
   workflow_dispatch:
 
-permissions:
-  contents: read
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   docker:
+    name: Build and push image
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
