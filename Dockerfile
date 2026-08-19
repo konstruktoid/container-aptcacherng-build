@@ -1,36 +1,45 @@
-FROM ubuntu:noble
+FROM ubuntu:noble@sha256:d78ab76437b1afc5f01e223d6bf0172763f404bb166441328845adbef44518cb
 
-ENV USER=apt-cacher-ng
+LABEL org.opencontainers.image.title="apt-cacher-ng" \
+      org.opencontainers.image.description="Apt-Cacher NG caching proxy for Debian/Ubuntu package repositories" \
+      org.opencontainers.image.authors="Thomas Sjögren <konstruktoid@users.noreply.github.com>" \
+      org.opencontainers.image.source="https://github.com/konstruktoid/container-aptcacherng-build" \
+      org.opencontainers.image.url="https://www.unix-ag.uni-kl.de/~bloch/acng/" \
+      org.opencontainers.image.base.name="docker.io/library/ubuntu:noble"
 
-LABEL \
-    org.label-schema.name="AptCacherNG" \
-    org.labelschema.url="https://www.unix-ag.uni-kl.de/~bloch/acng/" \
-    org.labelschema.vcs-url="git@github.com:konstruktoid/container-aptcacherng-build.git"
+ARG DEBIAN_FRONTEND=noninteractive
+ENV ACNG_USER=apt-cacher-ng
 
-COPY ./acng.sh /acng.sh
+# Owned by root and only readable/executable by others, so the unprivileged
+# runtime user cannot rewrite its own entry point.
+COPY --chmod=0555 ./acng.sh /acng.sh
 
-RUN \
-    sed -i 's/main/main universe/' /etc/apt/sources.list && \
-    apt-get update && \
+# universe is enabled by default in the official noble image, so no sources
+# rewriting is needed to reach apt-cacher-ng.
+RUN apt-get update && \
     apt-get -y upgrade && \
-    DEBIAN_FRONTEND=noninteractive apt-get -y install apt-cacher-ng \
-      ca-certificates curl --no-install-recommends && \
+    apt-get -y install --no-install-recommends \
+      apt-cacher-ng \
+      ca-certificates \
+      curl && \
+    mkdir -p /var/log/apt-cacher-ng /var/cache/apt-cacher-ng /var/run/apt-cacher-ng && \
+    chown -R "${ACNG_USER}:${ACNG_USER}" \
+      /var/cache/apt-cacher-ng \
+      /var/log/apt-cacher-ng \
+      /var/run/apt-cacher-ng && \
+    apt-get -y autoremove && \
     apt-get -y clean && \
-    mkdir -p /var/log/apt-cacher-ng /var/cache/apt-cacher-ng && \
-    chmod 0700 /acng.sh && \
-    chown -R $USER:$USER /acng.sh /var/cache/apt-cacher-ng \
-      /var/log/apt-cacher-ng /var/run/apt-cacher-ng && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
       /usr/share/doc /usr/share/doc-base \
       /usr/share/man /usr/share/locale /usr/share/zoneinfo
 
-HEALTHCHECK --interval=5m --timeout=3s \
-   CMD curl -f http://127.0.0.1:3142/acng-report.html || exit 1
+HEALTHCHECK --interval=5m --timeout=3s --start-period=30s \
+  CMD ["curl", "--fail", "--silent", "--show-error", "http://127.0.0.1:3142/acng-report.html"]
 
 VOLUME ["/var/cache/apt-cacher-ng"]
 EXPOSE 3142
 
-USER $USER
+USER $ACNG_USER
 
 ENTRYPOINT ["/acng.sh"]
-CMD ["VerboseLog=1","Debug=7","ForeGround=1","PassThroughPattern=.*"]
+CMD ["VerboseLog=1", "Debug=7", "PassThroughPattern=.*"]
